@@ -56,17 +56,32 @@
     let pausaMentalNode = document.querySelector('.jsPausaMental');
     pausaMentalNode.inicioUnixTiempo = Math.floor(new Date().getTime() / 1000);
     let pausaMentalReglaNode = document.querySelector('.jsPausaMentalRegla');
-    let letraNumero = Math.floor(Math.random() * 26);
+    let letraNumero = obtenerNumeroDe0ANoIncluido(26);
     let letra = String.fromCharCode(65 + letraNumero);
-    let reglaInicio = (Math.random() > 0.5 ? '-' : '');
+    let reglaInicio = (obtenerNumeroDe0ANoIncluido(2) ? '-' : '');
     let regla = (
       reglaInicio +
       letra +
-      (reglaInicio ? (Math.random() > 0.5 ? '-' : '') : '-')
+      (reglaInicio ? (obtenerNumeroDe0ANoIncluido(2) ? '-' : '') : '-')
     );
     pausaMentalReglaNode.innerText = regla;
     clearInterval(verificacionIntervalo);
+    if (pausaMentalNode.animacion) {
+      pausaMentalNode.animacion.cancel();
+    }
     verificacionIntervalo = setInterval(verificarFin);
+  }
+
+  function obtenerNumeroDe0ANoIncluido(maximoNoIncluido) {
+    const bytesCantidad = Math.ceil(maximoNoIncluido / 256);
+    const numeros = new Uint8Array(bytesCantidad);
+    let suma = 0;
+    do {
+      crypto.getRandomValues(numeros);
+      suma = 0;
+      numeros.forEach((numero) => {suma += numero;});
+    } while (suma >= maximoNoIncluido);
+    return suma;
   }
 
   function verificarFin() {
@@ -78,10 +93,27 @@
         pausaMentalNode.inicioUnixTiempo
       )
     );
+    if (contadorValor < 0) {
+      contadorValor = 0;
+    }
     document.querySelector('.jsPausaMentalContador').innerText = contadorValor;
     if (contadorValor) {
       return;
     }
+    pausaMentalNode.animacion = (
+      pausaMentalNode
+      .animate(
+        [
+          {background: 'rgba(255, 100, 0, 1)'},
+          {background: 'rgba(255, 127, 0, 1)'},
+          {background: 'rgba(255, 100, 0, 1)'},
+        ],
+        {
+          duration: 500,
+          iterations: Infinity,
+        }
+      )
+    );
     clearInterval(verificacionIntervalo);
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 4; j++) {
