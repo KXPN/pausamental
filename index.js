@@ -58,21 +58,40 @@
     let pausaMentalNode = document.querySelector('.jsPausaMental');
     pausaMentalNode.inicioUnixTiempo = Math.floor(new Date().getTime() / 1000);
     let pausaMentalReglaNode = document.querySelector('.jsPausaMentalRegla');
-    let letraNumero = obtenerNumeroDe0ANoIncluido(26);
-    let letra = String.fromCharCode(65 + letraNumero);
-    let reglaInicio = (obtenerNumeroDe0ANoIncluido(2) ? '-' : '');
     let regla = '';
+    let reglasProhibidasPorRegla = {
+      'W-': true,
+      'X-': true,
+      '-K-': true,
+      '-W-': true,
+      '-B': true,
+      '-C': true,
+      '-F': true,
+      '-G': true,
+      '-H': true,
+      '-J': true,
+      '-K': true,
+      '-M': true,
+      '-P': true,
+      '-Q': true,
+      '-T': true,
+      '-V': true,
+      '-W': true,
+      '-X': true,
+    };
     while (true) {
+      let letraNumero = obtenerNumeroDe0ANoIncluido(26);
+      let letra = String.fromCharCode(65 + letraNumero);
+      let reglaInicio = (obtenerNumeroDe0ANoIncluido(2) ? '-' : '');
       regla = (
         reglaInicio +
         letra +
         (reglaInicio ? (obtenerNumeroDe0ANoIncluido(2) ? '-' : '') : '-')
       );
-      if (reglasUsadasPorRegla[regla]) {
+      if (reglasUsadasPorRegla[regla] || reglasProhibidasPorRegla[regla]) {
         continue;
       }
       reglasUsadasPorRegla[regla] = true;
-      console.log(reglasUsadasPorRegla);
       break;
     }
     pausaMentalReglaNode.innerText = regla;
