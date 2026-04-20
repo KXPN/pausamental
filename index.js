@@ -45,6 +45,8 @@
   );
   let verificacionIntervalo;
 
+  let reglasUsadasPorRegla = {};
+
   function estilizar(elementoNode, valorPorPropiedad) {
     for (let propiedad in valorPorPropiedad) {
       let valor = valorPorPropiedad[propiedad];
@@ -59,11 +61,20 @@
     let letraNumero = obtenerNumeroDe0ANoIncluido(26);
     let letra = String.fromCharCode(65 + letraNumero);
     let reglaInicio = (obtenerNumeroDe0ANoIncluido(2) ? '-' : '');
-    let regla = (
-      reglaInicio +
-      letra +
-      (reglaInicio ? (obtenerNumeroDe0ANoIncluido(2) ? '-' : '') : '-')
-    );
+    let regla = '';
+    while (true) {
+      regla = (
+        reglaInicio +
+        letra +
+        (reglaInicio ? (obtenerNumeroDe0ANoIncluido(2) ? '-' : '') : '-')
+      );
+      if (reglasUsadasPorRegla[regla]) {
+        continue;
+      }
+      reglasUsadasPorRegla[regla] = true;
+      console.log(reglasUsadasPorRegla);
+      break;
+    }
     pausaMentalReglaNode.innerText = regla;
     clearInterval(verificacionIntervalo);
     if (pausaMentalNode.animacion) {
