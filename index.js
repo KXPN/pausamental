@@ -1,4 +1,5 @@
 (() => {
+  const SEGUNDOS_CANTIDAD = 60;
   let pausaMentalNode = document.createElement('div');
   document.body.appendChild(pausaMentalNode);
   pausaMentalNode.className = 'jsPausaMental';
@@ -43,6 +44,7 @@
       'font-size': '116px',
     }
   );
+  let audioContext = new AudioContext();
   let verificacionIntervalo;
 
   let reglasUsadasPorRegla = {};
@@ -117,7 +119,7 @@
   function verificarFin() {
     let pausaMentalNode = document.querySelector('.jsPausaMental');
     let contadorValor = (
-      60 -
+      SEGUNDOS_CANTIDAD -
       (
         Math.floor(new Date().getTime() / 1000) -
         pausaMentalNode.inicioUnixTiempo
@@ -153,8 +155,6 @@
   }
 
   function pitar(inicioTiempoSegundosCantidad) {
-    let audioContext = new AudioContext();
-
     let gainNode = audioContext.createGain();
     gainNode.gain.value = 0.2;
     gainNode.connect(audioContext.destination);
